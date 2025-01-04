@@ -7,8 +7,9 @@
  *  our members with the free users can make limited (10 for now) request per day.
  *  All API requests count are reset at 00:00 UTC(+0).
  * */
+import { ScannerRaw } from "@/app/lib/definitions";
 
-export const scannersData = [
+export const scannersData: ScannerRaw[] = [
   {
     name: "Fortinet FortiDDoS Certificate Detection Scanner",
     result_img: null,

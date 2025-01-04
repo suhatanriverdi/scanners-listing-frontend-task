@@ -1,17 +1,37 @@
 import { Scanner } from "./definitions";
-import { scannersData } from "../seed/seedScannersData";
+// import { scannersData } from "../seed/seedScannersData";
+import { API_URL } from "@/app/config/endpoints";
+// import { getSeverity } from "@/app/utils/getSeverity";
 
-export async function fetchScanners() {
+// TODO
+// Search:    ?text=Fortinet
+// Category:
+export const fetchScanners = async (
+  category: number,
+  search: string,
+  page: number = 0,
+): Promise<Scanner[]> => {
+  const apiUrl = API_URL;
+
+  const url = new URL(apiUrl);
+  const params = new URLSearchParams();
+
+  params.append("category", category.toString());
+  if (search) params.append("text", search);
+
+  params.append("page", page.toString());
+
   try {
-    // Intentionally delay a response for demo purposes.
-    console.log("Fetching scanners data...");
-    const data = await new Promise<Scanner[]>((resolve) =>
-      setTimeout(() => resolve(scannersData), 1000),
-    );
-    console.log("Data fetch completed.");
+    const response = await fetch(`${url}?${params.toString()}`);
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch data");
+    }
+
+    const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error fetching scanners data:", error);
-    throw new Error("Failed to fetch scanners data.");
+    console.error("Fetch Error: ", error);
+    throw error;
   }
-}
+};
