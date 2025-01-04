@@ -23,6 +23,7 @@ import {
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
+  SearchIcon,
 } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -66,27 +67,33 @@ export function DataTable<TData, TValue>({
   return (
     <div>
       {/* Search Bar and Category Filter */}
-      <div className="flex items-center justify-between p-4">
-        <div className="flex items-center space-x-2">
-          <input
-            type="text"
-            placeholder="Search..."
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-            className="border rounded-md h-10 px-2"
-          />
+      <div className="flex flex-col md:flex-row items-center justify-between p-4 space-y-2 md:space-y-0">
+        <div className="flex items-center space-x-2 w-full md:w-auto">
+          <div className="relative w-full">
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              className="border border-sky-500 rounded-md h-10 px-4 pr-10 focus:outline-none focus:ring focus:ring-sky-300 w-full"
+            />
+            <span className="absolute right-3 top-2 text-sky-500">
+              <SearchIcon />
+            </span>
+          </div>
           <Button
             onClick={handleSearch}
-            className="bg-sky-500 text-white hover:bg-sky-600"
+            className="bg-sky-500 text-white hover:bg-sky-600 h-10"
           >
             Search
           </Button>
         </div>
-        <div className="flex items-center space-x-2">
+
+        <div className="flex items-center space-x-2 w-full md:w-auto">
           <select
             value={selectedCategory || ""}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="border rounded-md h-10 px-2"
+            className="border rounded-md h-10 px-2 focus:outline-none focus:ring focus:ring-sky-300 w-full"
           >
             <option value="">Select Category</option>
             {categories.map((category) => (
