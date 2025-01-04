@@ -24,6 +24,9 @@ import {
   ChevronsLeft,
   ChevronsRight,
 } from "lucide-react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { categories } from "@/app/utils/utils"; // Updated import
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -34,6 +37,13 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const router = useRouter(); // Using the correct router
+
+  // State for search and category
+  const [searchText, setSearchText] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+  // Initialize the table
   const table = useReactTable({
     data,
     columns,
@@ -41,8 +51,53 @@ export function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
   });
 
+  const handleSearch = () => {
+    const query = new URLSearchParams();
+    if (selectedCategory) {
+      query.set("tools-category", selectedCategory);
+    }
+    if (searchText) {
+      query.set("text", searchText);
+    }
+    query.set("page", String(0)); // Reset to page 0 on search
+    router.push(`/scans/tools?scan_type=0&${query.toString()}`);
+  };
+
   return (
     <div>
+      {/* Search Bar and Category Filter */}
+      <div className="flex items-center justify-between p-4">
+        <div className="flex items-center space-x-2">
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            className="border rounded-md h-10 px-2"
+          />
+          <Button
+            onClick={handleSearch}
+            className="bg-sky-500 text-white hover:bg-sky-600"
+          >
+            Search
+          </Button>
+        </div>
+        <div className="flex items-center space-x-2">
+          <select
+            value={selectedCategory || ""}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="border rounded-md h-10 px-2"
+          >
+            <option value="">Select Category</option>
+            {categories.map((category) => (
+              <option key={category.value} value={category.value}>
+                {category.label}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -95,7 +150,7 @@ export function DataTable<TData, TValue>({
       {/* Pagination Controls */}
       <div className="flex items-center justify-between px-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
-          {"total scanners:" + data.length}
+          {"Total:" + data.length}
         </div>
         <div className="flex items-center space-x-6 lg:space-x-8">
           <div className="flex items-center space-x-2">
