@@ -5,7 +5,7 @@ import { transformScannerData } from "@/app/utils/utils";
 
 export default function Scanners() {
   const scanners = transformScannerData(scannersData);
-  
+
   return (
     <div className="container mx-auto py-10">
       <DataTable columns={columns} data={scanners} />
