@@ -2,6 +2,18 @@
 
 This repository contains the implementation of a simple frontend application for the S4E.io platform. The application replicates a scan tools list with filtering, responsive design, and local state persistence. It is built using **Next.js**, **Tailwind CSS**, and **ShadCN UI**.
 
+## Screenshots
+
+<img width="1472" alt="Screenshot 2025-01-06 at 00 13 46" src="https://github.com/user-attachments/assets/cd3315cc-ea25-4f33-ae27-7c33eb2ab8cf" />
+<hr />
+<img width="1471" alt="Screenshot 2025-01-06 at 00 14 23" src="https://github.com/user-attachments/assets/36ef0ef2-dfe6-492b-9960-9706ff5c414b" />
+<hr />
+<img width="325" alt="Screenshot 2025-01-06 at 00 14 43" src="https://github.com/user-attachments/assets/71575d08-1cfd-4033-bc83-5d0ac665ab00" />
+<hr />
+<img width="1469" alt="Screenshot 2025-01-06 at 00 15 08" src="https://github.com/user-attachments/assets/db2d74b6-bb3a-4f8a-ae4a-feaa83b52b21" />
+<hr />
+<img width="1263" alt="image" src="https://github.com/user-attachments/assets/13446b91-3d7c-4e87-a377-e4a9ae2e1e26" />
+
 ## Project Description
 
 **S4E.io** is a cybersecurity platform that continuously detects and reports system vulnerabilities. This project focuses on implementing the scan tools list available at [S4E.io Scan Tools](https://app.s4e.io/scans/tools).
