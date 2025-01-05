@@ -18,8 +18,18 @@ export const columns: ColumnDef<Scanner>[] = [
       </Button>
     ),
     cell: ({ row }) => (
-      <div className="h-12 overflow-hidden" title={row.getValue("name")}>
-        <span className="leading-tight line-clamp-2 h-full flex items-center">
+      <div
+        className="w-[300px] overflow-hidden"
+        title={row.getValue("name")} // Tooltip gösterir
+      >
+        <span
+          className="line-clamp-2 overflow-hidden text-ellipsis"
+          style={{
+            display: "-webkit-box",
+            WebkitBoxOrient: "vertical",
+            WebkitLineClamp: 2, // 2 satır sınırı
+          }}
+        >
           {row.getValue("name")}
         </span>
       </div>
@@ -37,8 +47,18 @@ export const columns: ColumnDef<Scanner>[] = [
       </Button>
     ),
     cell: ({ row }) => (
-      <div className="h-12 overflow-hidden" title={row.getValue("description")}>
-        <span className="leading-tight line-clamp-2 h-full flex items-center">
+      <div
+        className="w-[500px] overflow-hidden"
+        title={row.getValue("description")} // Tooltip gösterir
+      >
+        <span
+          className="line-clamp-2 overflow-hidden text-ellipsis"
+          style={{
+            display: "-webkit-box",
+            WebkitBoxOrient: "vertical",
+            WebkitLineClamp: 2, // 2 satır sınırı
+          }}
+        >
           {row.getValue("description")}
         </span>
       </div>
