@@ -3,12 +3,10 @@
 import { toast } from "@/hooks/use-toast";
 import { columns } from "./columns";
 import { DataTable } from "./dataTable";
-import { scannersData } from "@/app/seed/seedScannersData";
-import { getFormattedDate, transformScannerData } from "@/app/utils/utils";
-import { Scanner } from "@/app/lib/definitions";
+import { getFormattedDate } from "@/app/utils/utils";
 import { useQueryStore } from "@/app/store/queryStore";
 import { fetchScanners } from "@/app/lib/data";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   getCurrentPageParam,
   getResultsPerPageParam,
@@ -17,7 +15,7 @@ import {
 } from "@/app/store/localStorageService";
 
 export default function Scanners() {
-  // Local sample data, TODO
+  // Local sample data
   // const scanners: Scanner[] = transformScannerData(scannersData);
   const { scanners, setScanners } = useQueryStore();
 
@@ -60,7 +58,12 @@ export default function Scanners() {
   useEffect(() => {
     const handleFetchScanners = async () => {
       try {
-        const fetchedScanners = await fetchScanners();
+        const fetchedScanners = await fetchScanners(
+          searchInputParam,
+          scanCategoryIdParam,
+          currentPageParam,
+          resultsPerPageParam,
+        );
         setScanners(fetchedScanners);
       } catch (error: unknown) {
         // Type narrowing for error
@@ -83,6 +86,17 @@ export default function Scanners() {
     };
 
     handleFetchScanners();
+
+    console.log(
+      "searchInputParam:",
+      searchInputParam,
+      "scanCategoryIdParam:",
+      scanCategoryIdParam,
+      "currentPageParam: ",
+      currentPageParam,
+      "resultsPerPageParam: ",
+      resultsPerPageParam,
+    );
   }, [
     searchInputParam,
     scanCategoryIdParam,

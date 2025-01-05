@@ -1,21 +1,15 @@
-// lib/data.ts
 "use server";
 
-import { useQueryStore } from "@/app/store/queryStore"; // Adjust path as necessary
 import { ENDPOINTS } from "@/app/config/endpoints";
 import { FetchScannersBody, Scanner } from "@/app/lib/definitions";
-import { transformScannerData } from "@/app/utils/utils"; // Adjust path as necessary
+import { transformScannerData } from "@/app/utils/utils";
 
-export const fetchScanners = async () => {
-  "use server";
-  // Get state directly from Zustand store
-  const {
-    searchInputParam,
-    scanCategoryIdParam,
-    currentPageParam,
-    resultsPerPageParam,
-  } = useQueryStore.getState();
-
+export const fetchScanners = async (
+  searchInputParam: string | undefined,
+  scanCategoryIdParam: string | undefined,
+  currentPageParam: number,
+  resultsPerPageParam: number,
+) => {
   const token = process.env.NEXT_PUBLIC_API_TOKEN;
 
   if (!token) {
@@ -39,7 +33,7 @@ export const fetchScanners = async () => {
 
   const url = `${ENDPOINTS.scanners}`; // This should point to your API route
   console.log("url:", url, "\n\n");
-  console.log("Request Body:", JSON.stringify(body, null, 2), "\n\n");
+  console.log("Request Body:", body);
 
   try {
     const response = await fetch(url, {
@@ -55,14 +49,12 @@ export const fetchScanners = async () => {
     }
 
     const data = await response.json();
-    // console.log("Response Data:", data); // Log the response data for debugging
-
     const transformedData: Scanner[] = transformScannerData(data.value.data);
     console.log("transformedData:", transformedData);
-
-    return transformedData; // Return the fetched data
+    // Return the fetched data
+    return transformedData;
   } catch (error) {
     console.error("Error fetching scanners:", error);
-    throw error; // Rethrow error for further handling if needed
+    throw error;
   }
 };
