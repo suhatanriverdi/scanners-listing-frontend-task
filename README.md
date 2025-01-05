@@ -1,6 +1,10 @@
-# S4E.io Frontend Application
+# Next.js App Data Table Listing
 
 This repository contains the implementation of a simple frontend application for the S4E.io platform. The application replicates a scan tools list with filtering, responsive design, and local state persistence. It is built using **Next.js**, **Tailwind CSS**, and **ShadCN UI**.
+
+## 🚀 Live Preview
+You can have a look at the live preview link:
+## [Live Preview Link](https://scanners-listing-frontend-task.vercel.app/)
 
 ## Screenshots
 
