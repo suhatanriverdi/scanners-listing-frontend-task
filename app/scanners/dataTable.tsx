@@ -53,9 +53,9 @@ export function DataTable<TData, TValue>({
   data,
 }: DataTableProps<TData, TValue>) {
   // State for sorting columns
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [sorting, setSorting] = useState<SortingState>([]);
 
-  // State for search and category for query string
+  // Get parameters from Zustand store
   const {
     setSearchInputParam,
     setScanCategoryIdParam,
@@ -63,14 +63,13 @@ export function DataTable<TData, TValue>({
     resultsPerPageParam,
     setCurrentPage,
     setResultsPerPage,
-    searchInputParam, // Get search input param from store
-    scanCategoryIdParam, // Get scan category id param from store
+    searchInputParam,
+    scanCategoryIdParam,
+    totalCountParam,
   } = useQueryStore();
 
   // State for search and category
   const [searchText, setSearchText] = useState("");
-
-  // This is for UI only
   const [selectedCategory, setSelectedCategory] = useState<
     CategoryItem | undefined
   >(undefined);
@@ -85,10 +84,6 @@ export function DataTable<TData, TValue>({
       const category = categories.at(Number(scanCategoryIdParam) - 1);
       setSelectedCategory(category);
     }
-
-    // Optionally, you can also set the Zustand store values if needed
-    // setSearchInputParam(searchText);
-    // setScanCategoryIdParam(selectedCategory?.id);
   }, [searchInputParam, scanCategoryIdParam]);
 
   // Initialize the table
@@ -97,16 +92,21 @@ export function DataTable<TData, TValue>({
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    manualPagination: true, // Server-side pagination
+    rowCount: totalCountParam, // Total count for pagination
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     state: {
       sorting,
       pagination: {
-        pageIndex: currentPageParam - 1, // Adjust for zero-based index
+        pageIndex: currentPageParam - 1,
         pageSize: resultsPerPageParam,
       },
     },
   });
+
+  console.log("Table Data:", data);
+  console.log("Table Rows:", table.getRowModel().rows);
 
   // Handle page change
   const handlePageChange = (newPageIndex: number) => {
@@ -249,7 +249,7 @@ export function DataTable<TData, TValue>({
       {/* Pagination Controls */}
       <div className="flex items-center justify-between px-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
-          {"Total: " + data.length}
+          {"Total: " + totalCountParam} {/* Total count from Zustand store */}
         </div>
         <div className="flex items-center gap-x-4 lg:gap-x-8">
           <div className="flex items-center gap-x-2">
@@ -257,7 +257,6 @@ export function DataTable<TData, TValue>({
             <select
               value={`${table.getState().pagination.pageSize}`}
               onChange={(e) => {
-                // table.setPageSize(Number(e.target.value));
                 handleResultsPerPageChange(Number(e.target.value));
               }}
               className="h-8 w-[2.9rem] border rounded-md"
@@ -271,8 +270,9 @@ export function DataTable<TData, TValue>({
           </div>
 
           <div className="flex items-center justify-center text-sm font-medium">
-            Page {table.getState().pagination.pageIndex + 1} of{" "}
-            {table.getPageCount()}
+            Page {currentPageParam} of{" "}
+            {Math.ceil(totalCountParam / resultsPerPageParam)}{" "}
+            {/* Total pages */}
           </div>
 
           <div className="flex items-center gap-x-2">
@@ -280,7 +280,7 @@ export function DataTable<TData, TValue>({
               variant="outline"
               className="hidden h-8 w-8 p-0 lg:flex"
               onClick={() => handlePageChange(0)}
-              disabled={!table.getCanPreviousPage()}
+              disabled={currentPageParam === 1} // Disable if on the first page
             >
               <span className="sr-only">Go to first page</span>
               <ChevronsLeft />
@@ -291,7 +291,7 @@ export function DataTable<TData, TValue>({
               onClick={() =>
                 handlePageChange(table.getState().pagination.pageIndex - 1)
               }
-              disabled={!table.getCanPreviousPage()}
+              disabled={currentPageParam === 1} // Disable if on the first page
             >
               <span className="sr-only">Go to previous page</span>
               <ChevronLeft />
@@ -302,7 +302,9 @@ export function DataTable<TData, TValue>({
               onClick={() =>
                 handlePageChange(table.getState().pagination.pageIndex + 1)
               }
-              disabled={!table.getCanNextPage()}
+              disabled={
+                currentPageParam * resultsPerPageParam >= totalCountParam
+              } // Disable if on the last page
             >
               <span className="sr-only">Go to next page</span>
               <ChevronRight />
@@ -310,8 +312,14 @@ export function DataTable<TData, TValue>({
             <Button
               variant="outline"
               className="hidden h-8 w-8 p-0 lg:flex"
-              onClick={() => handlePageChange(table.getPageCount() - 1)}
-              disabled={!table.getCanNextPage()}
+              onClick={() =>
+                handlePageChange(
+                  Math.ceil(totalCountParam / resultsPerPageParam) - 1,
+                )
+              } // Go to last page
+              disabled={
+                currentPageParam * resultsPerPageParam >= totalCountParam
+              } // Disable if on the last page
             >
               <span className="sr-only">Go to last page</span>
               <ChevronsRight />

@@ -9,21 +9,24 @@ import {
 
 interface Store {
   scanners: Scanner[];
-  searchInputParam: string | undefined;
-  scanCategoryIdParam: string | undefined;
+  searchInputParam: string;
+  scanCategoryIdParam: string;
+  totalCountParam: number; // Total rows
   currentPageParam: number; // Current page number
   resultsPerPageParam: number; // Number of results per page
   setScanners: (scanners: Scanner[]) => void;
   setSearchInputParam: (text?: string) => void;
   setScanCategoryIdParam: (id?: string) => void;
   setCurrentPage: (page: number) => void; // Function to set current page
+  setTotalCountParam: (count?: number) => void; // Function to set total count
   setResultsPerPage: (count: number) => void; // Function to set results per page
 }
 
 export const useQueryStore = create<Store>((set) => ({
   scanners: [],
-  searchInputParam: undefined,
-  scanCategoryIdParam: undefined,
+  totalCountParam: 0,
+  searchInputParam: "",
+  scanCategoryIdParam: "",
   currentPageParam: 1, // Default page number
   resultsPerPageParam: 10, // Default results per page
   setScanners: (scanners) => set({ scanners }),
@@ -36,6 +39,10 @@ export const useQueryStore = create<Store>((set) => ({
   setScanCategoryIdParam: (id) => {
     set({ scanCategoryIdParam: id });
     setScanCategoryIdParam(id); // Save to local storage
+  },
+
+  setTotalCountParam: (totalCount) => {
+    set({ totalCountParam: totalCount });
   },
 
   setCurrentPage: (page) => {

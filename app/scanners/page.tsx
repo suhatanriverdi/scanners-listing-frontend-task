@@ -16,6 +16,7 @@ import {
 
 export default function Scanners() {
   // Local sample data
+  // Use this for demo purposes
   // const scanners: Scanner[] = transformScannerData(scannersData);
   const { scanners, setScanners } = useQueryStore();
 
@@ -28,6 +29,7 @@ export default function Scanners() {
     setScanCategoryIdParam: setStoreScanCategoryIdParam,
     setCurrentPage: setStoreCurrentPage,
     setResultsPerPage: setStoreResultsPerPage,
+    setTotalCountParam: setTotalCountParam,
   } = useQueryStore();
 
   // Initialize store values from localStorage when the component mounts
@@ -58,12 +60,17 @@ export default function Scanners() {
   useEffect(() => {
     const handleFetchScanners = async () => {
       try {
-        const fetchedScanners = await fetchScanners(
+        const [fetchedScanners, totalCount] = await fetchScanners(
           searchInputParam,
           scanCategoryIdParam,
           currentPageParam,
           resultsPerPageParam,
         );
+
+        console.log("fetchedScanners:", fetchedScanners);
+        console.log("totalCount:", totalCount);
+
+        setTotalCountParam(totalCount);
         setScanners(fetchedScanners);
       } catch (error: unknown) {
         // Type narrowing for error
@@ -86,17 +93,6 @@ export default function Scanners() {
     };
 
     handleFetchScanners();
-
-    console.log(
-      "searchInputParam:",
-      searchInputParam,
-      "scanCategoryIdParam:",
-      scanCategoryIdParam,
-      "currentPageParam: ",
-      currentPageParam,
-      "resultsPerPageParam: ",
-      resultsPerPageParam,
-    );
   }, [
     searchInputParam,
     scanCategoryIdParam,

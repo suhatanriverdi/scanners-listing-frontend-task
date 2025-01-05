@@ -5,15 +5,16 @@ import { FetchScannersBody, Scanner } from "@/app/lib/definitions";
 import { transformScannerData } from "@/app/utils/utils";
 
 export const fetchScanners = async (
-  searchInputParam: string | undefined,
-  scanCategoryIdParam: string | undefined,
+  searchInputParam: string,
+  scanCategoryIdParam: string,
   currentPageParam: number,
   resultsPerPageParam: number,
 ) => {
   const token = process.env.NEXT_PUBLIC_API_TOKEN;
 
+  // Handle missing token error
   if (!token) {
-    throw new Error("API_TOKEN is not defined"); // Handle missing token error
+    throw new Error("API_TOKEN is not defined");
   }
 
   // Prepare the request body
@@ -28,12 +29,10 @@ export const fetchScanners = async (
   }
 
   if (scanCategoryIdParam) {
-    body.scan_category_id = Number(scanCategoryIdParam);
+    body.scan_category_id = parseInt(scanCategoryIdParam);
   }
 
   const url = `${ENDPOINTS.scanners}`; // This should point to your API route
-  console.log("url:", url, "\n\n");
-  console.log("Request Body:", body);
 
   try {
     const response = await fetch(url, {
@@ -50,9 +49,15 @@ export const fetchScanners = async (
 
     const data = await response.json();
     const transformedData: Scanner[] = transformScannerData(data.value.data);
-    console.log("transformedData:", transformedData);
-    // Return the fetched data
-    return transformedData;
+    const totalRowsCount = data.value.total_count;
+
+    console.log("url:", url, "\n\n");
+    console.log("Request Body:", body);
+    console.log("transformedData:", transformedData.pop(), "\n\n");
+    console.log("totalRowsCount:", totalRowsCount);
+
+    // Return the fetched data & total rows count
+    return [transformedData, totalRowsCount];
   } catch (error) {
     console.error("Error fetching scanners:", error);
     throw error;
