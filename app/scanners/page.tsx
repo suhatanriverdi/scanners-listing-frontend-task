@@ -15,12 +15,17 @@ export default function Scanners() {
   // Local sample data TODO
   const scanners: Scanner[] = transformScannerData(scannersData);
 
-  const { searchInputParam, scanCategoryIdParam } = useQueryStore();
+  const { searchInputParam, scanCategoryIdParam, currentPage, resultsPerPage } =
+    useQueryStore();
   console.log(
     "searchInputParam: ",
     searchInputParam,
     "scanCategoryIdParam: ",
     scanCategoryIdParam,
+    "currentPageParam: ",
+    currentPage,
+    "resultsPerPage: ",
+    resultsPerPage,
   );
 
   // const [searchText, setSearchText] = useState<string | undefined>(undefined);

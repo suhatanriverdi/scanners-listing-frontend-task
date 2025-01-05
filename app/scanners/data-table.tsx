@@ -59,7 +59,14 @@ export function DataTable<TData, TValue>({
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
   // State for search and category for query string
-  const { setSearchInputParam, setScanCategoryIdParam } = useQueryStore();
+  const {
+    setSearchInputParam,
+    setScanCategoryIdParam,
+    currentPage,
+    resultsPerPage,
+    setCurrentPage,
+    setResultsPerPage,
+  } = useQueryStore();
 
   // State for search and category
   const [searchText, setSearchText] = useState("");
@@ -76,8 +83,25 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     state: {
       sorting,
+      pagination: {
+        pageIndex: currentPage - 1, // Adjust for zero-based index
+        pageSize: resultsPerPage,
+      },
     },
   });
+
+  // Handle page change
+  const handlePageChange = (newPageIndex: number) => {
+    setCurrentPage(newPageIndex + 1); // Update Zustand store (1-based index)
+    table.setPageIndex(newPageIndex); // Update local table state
+  };
+
+  // Handle results per page change
+  const handleResultsPerPageChange = (newPageSize: number) => {
+    setResultsPerPage(newPageSize); // Update Zustand store
+    table.setPageSize(newPageSize); // Update local table state
+    handlePageChange(0); // Reset to first page when changing page size
+  };
 
   const handleSearch = () => {
     const query = new URLSearchParams();
@@ -87,6 +111,7 @@ export function DataTable<TData, TValue>({
     }
     if (searchText) {
       setSearchInputParam(searchText);
+      setSearchText("");
       query.set("text", searchText);
     }
     query.set("page", String(0)); // Reset to page 0 on search
@@ -142,7 +167,10 @@ export function DataTable<TData, TValue>({
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className="cursor-pointer"
-              onSelect={() => setSelectedCategory(undefined)} // Reset selection
+              onSelect={() => {
+                setSelectedCategory(undefined);
+                setScanCategoryIdParam(undefined);
+              }} // Reset selection
             >
               Clear Selection
             </DropdownMenuItem>
@@ -210,7 +238,10 @@ export function DataTable<TData, TValue>({
             <p className="text-sm font-medium">Rows:</p>
             <select
               value={`${table.getState().pagination.pageSize}`}
-              onChange={(e) => table.setPageSize(Number(e.target.value))}
+              onChange={(e) => {
+                // table.setPageSize(Number(e.target.value));
+                handleResultsPerPageChange(Number(e.target.value));
+              }}
               className="h-8 w-[2.9rem] border rounded-md"
             >
               {[10, 20, 30, 40, 50].map((pageSize) => (
@@ -230,7 +261,7 @@ export function DataTable<TData, TValue>({
             <Button
               variant="outline"
               className="hidden h-8 w-8 p-0 lg:flex"
-              onClick={() => table.setPageIndex(0)}
+              onClick={() => handlePageChange(0)}
               disabled={!table.getCanPreviousPage()}
             >
               <span className="sr-only">Go to first page</span>
@@ -239,7 +270,9 @@ export function DataTable<TData, TValue>({
             <Button
               variant="outline"
               className="h-8 w-8 p-0"
-              onClick={() => table.previousPage()}
+              onClick={() =>
+                handlePageChange(table.getState().pagination.pageIndex - 1)
+              }
               disabled={!table.getCanPreviousPage()}
             >
               <span className="sr-only">Go to previous page</span>
@@ -248,7 +281,9 @@ export function DataTable<TData, TValue>({
             <Button
               variant="outline"
               className="h-8 w-8 p-0"
-              onClick={() => table.nextPage()}
+              onClick={() =>
+                handlePageChange(table.getState().pagination.pageIndex + 1)
+              }
               disabled={!table.getCanNextPage()}
             >
               <span className="sr-only">Go to next page</span>
@@ -257,7 +292,7 @@ export function DataTable<TData, TValue>({
             <Button
               variant="outline"
               className="hidden h-8 w-8 p-0 lg:flex"
-              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+              onClick={() => handlePageChange(table.getPageCount() - 1)}
               disabled={!table.getCanNextPage()}
             >
               <span className="sr-only">Go to last page</span>
