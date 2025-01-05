@@ -30,7 +30,7 @@ import {
   SearchIcon,
   XIcon,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { categories } from "@/app/utils/utils";
 import {
   DropdownMenu,
@@ -52,7 +52,7 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  // State for sorting colums
+  // State for sorting columns
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
   // State for search and category for query string
@@ -63,13 +63,33 @@ export function DataTable<TData, TValue>({
     resultsPerPageParam,
     setCurrentPage,
     setResultsPerPage,
+    searchInputParam, // Get search input param from store
+    scanCategoryIdParam, // Get scan category id param from store
   } = useQueryStore();
 
   // State for search and category
   const [searchText, setSearchText] = useState("");
 
   // This is for UI only
-  const [selectedCategory, setSelectedCategory] = useState<CategoryItem>();
+  const [selectedCategory, setSelectedCategory] = useState<
+    CategoryItem | undefined
+  >(undefined);
+
+  // Initialize the searchText and selectedCategory when the component mounts
+  useEffect(() => {
+    if (searchInputParam) {
+      setSearchText(searchInputParam);
+    }
+
+    if (scanCategoryIdParam) {
+      const category = categories.at(Number(scanCategoryIdParam) - 1);
+      setSelectedCategory(category);
+    }
+
+    // Optionally, you can also set the Zustand store values if needed
+    // setSearchInputParam(searchText);
+    // setScanCategoryIdParam(selectedCategory?.id);
+  }, [searchInputParam, scanCategoryIdParam]);
 
   // Initialize the table
   const table = useReactTable({

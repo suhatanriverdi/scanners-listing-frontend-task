@@ -1,17 +1,19 @@
 "use client";
 
 import { columns } from "./columns";
-import { DataTable } from "./data-table";
+import { DataTable } from "./dataTable";
 import { scannersData } from "@/app/seed/seedScannersData";
 import { transformScannerData } from "@/app/utils/utils";
-// import { useEffect, useState } from "react";
 import { Scanner } from "@/app/lib/definitions";
 import { useQueryStore } from "@/app/store/queryStore";
 import { fetchScanners } from "@/app/lib/data";
 import { useEffect } from "react";
-// import { ENDPOINTS } from "@/app/config/endpoints";
-// import {handleScan} from "@/app/lib/scan-service";
-// import {useEffect} from "react";
+import {
+  getCurrentPageParam,
+  getResultsPerPageParam,
+  getScanCategoryIdParam,
+  getSearchInputParam,
+} from "@/app/store/localStorageService";
 
 export default function Scanners() {
   // Local sample data, TODO
@@ -34,6 +36,45 @@ export default function Scanners() {
     resultsPerPageParam,
   );
 
+  const {
+    setSearchInputParam: setStoreSearchInputParam,
+    setScanCategoryIdParam: setStoreScanCategoryIdParam,
+    setCurrentPage: setStoreCurrentPage,
+    setResultsPerPage: setStoreResultsPerPage,
+  } = useQueryStore();
+
+  // Initialize store values from localStorage when the component mounts
+  useEffect(() => {
+    const searchInput = getSearchInputParam();
+    const scanCategoryId = getScanCategoryIdParam();
+    const currentPage = getCurrentPageParam();
+    const resultsPerPage = getResultsPerPageParam();
+
+    // console.log(
+    //   "LOCALGET: ",
+    //   searchInput,
+    //   scanCategoryId,
+    //   currentPage,
+    //   resultsPerPage,
+    // );
+
+    if (searchInput !== null) {
+      setStoreSearchInputParam(searchInput);
+    }
+
+    if (scanCategoryId !== null) {
+      setStoreScanCategoryIdParam(scanCategoryId);
+    }
+
+    if (currentPage !== null) {
+      setStoreCurrentPage(currentPage);
+    }
+
+    if (resultsPerPage !== null) {
+      setStoreResultsPerPage(resultsPerPage);
+    }
+  }, []);
+
   // Fetch scanners when component mounts or when any relevant parameter changes
   useEffect(() => {
     const handleFetchScanners = async () => {
@@ -45,12 +86,7 @@ export default function Scanners() {
       }
     };
     handleFetchScanners();
-  }, [
-    searchInputParam,
-    scanCategoryIdParam,
-    currentPageParam,
-    resultsPerPageParam,
-  ]);
+  }, []);
 
   return (
     <div className="container max-w-full w-full">

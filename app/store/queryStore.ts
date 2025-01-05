@@ -1,5 +1,11 @@
 import { create } from "zustand";
 import { Scanner } from "@/app/lib/definitions";
+import {
+  setCurrentPageParam,
+  setResultsPerPageParam,
+  setScanCategoryIdParam,
+  setSearchInputParam,
+} from "@/app/store/localStorageService";
 
 interface Store {
   scanners: Scanner[];
@@ -21,8 +27,24 @@ export const useQueryStore = create<Store>((set) => ({
   currentPageParam: 1, // Default page number
   resultsPerPageParam: 10, // Default results per page
   setScanners: (scanners) => set({ scanners }),
-  setSearchInputParam: (text) => set({ searchInputParam: text }),
-  setScanCategoryIdParam: (id) => set({ scanCategoryIdParam: id }),
-  setCurrentPage: (page) => set({ currentPageParam: page }), // Update current page
-  setResultsPerPage: (count) => set({ resultsPerPageParam: count }), // Update results per page
+
+  setSearchInputParam: (text) => {
+    set({ searchInputParam: text });
+    setSearchInputParam(text); // Save to local storage
+  },
+
+  setScanCategoryIdParam: (id) => {
+    set({ scanCategoryIdParam: id });
+    setScanCategoryIdParam(id); // Save to local storage
+  },
+
+  setCurrentPage: (page) => {
+    set({ currentPageParam: page });
+    setCurrentPageParam(page); // Save to local storage
+  },
+
+  setResultsPerPage: (count) => {
+    set({ resultsPerPageParam: count });
+    setResultsPerPageParam(count); // Save to local storage
+  },
 }));
