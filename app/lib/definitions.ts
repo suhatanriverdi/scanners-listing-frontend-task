@@ -28,6 +28,9 @@ export interface ScannerData {
   value: {
     data: Scanner[];
   };
+  message: string;
+  code: number;
+  error: boolean;
 }
 
 // TODO Structure of the raw data returned from the API

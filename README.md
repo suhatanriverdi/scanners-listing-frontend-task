@@ -1,36 +1,130 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# S4E.io Frontend Application
 
-## Getting Started
+This repository contains the implementation of a simple frontend application for the S4E.io platform. The application replicates a scan tools list with filtering, responsive design, and local state persistence. It is built using **Next.js**, **Tailwind CSS**, and **ShadCN UI**.
 
-First, run the development server:
+## Project Description
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+**S4E.io** is a cybersecurity platform that continuously detects and reports system vulnerabilities. This project focuses on implementing the scan tools list available at [S4E.io Scan Tools](https://app.s4e.io/scans/tools).
+
+### Features
+
+1. **Responsive Design**
+   - Implements a sidebar navigation and table-based layout.
+   - Supports both light and dark themes.
+
+2. **Table Functionality**
+   - Filters based on `scan category` and `search`.
+   - Persisted filters using local storage to maintain the state after refresh or browser restart.
+   - Paginated table for better data visualization.
+
+3. **Error Handling**
+   - Displays user-friendly messages for API errors.
+
+4. **Backend Integration**
+   - Fetches scan tools data via API from `https://app.s4e.io/api-token`.
+   - Uses `fetch` for data retrieval.
+
+## Tech Stack
+
+- **Next.js**: Framework for server-side rendering and routing.
+- **Tailwind CSS**: Utility-first CSS framework.
+- **ShadCN UI**: Component library for consistent design.
+- **Zustand**: State management library for managing table filters and persistence.
+- **TypeScript**: Typed JavaScript for improved developer experience.
+
+## Folder Structure
+
+```
+app/
+├── components/          # Placeholder for reusable React components.
+├── config/              # API endpoints and configuration files.
+│   └── endpoints.ts     # Endpoint configuration.
+├── lib/                 # Utility functions and data definitions.
+│   ├── data.ts          # Mock or utility data.
+│   └── definitions.ts   # TypeScript type definitions.
+├── scanners/            # Components and logic specific to the scan tools list.
+│   ├── columns.tsx      # Table column definitions.
+│   ├── dataTable.tsx    # Data table implementation.
+│   └── page.tsx         # Main page for displaying the scan tools list.
+├── seed/                # Seeder data for development.
+│   └── seedScannersData.ts
+├── store/               # Zustand state management logic.
+│   ├── localStorageService.ts # Utilities for managing local storage.
+│   └── queryStore.ts         # Zustand store for filters and table state.
+├── ui/                  # UI components like navigation and sidebar.
+│   ├── navLinks.tsx     # Links for navigation.
+│   └── sidenav.tsx      # Sidebar component.
+├── utils/               # General utility functions.
+│   └── utils.ts
+├── globals.css          # Global styles.
+├── layout.tsx           # App layout component.
+└── page.tsx             # Root page implementation.
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Installation and Setup
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Prerequisites
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Node.js (version >= 18.x recommended)
+- npm, yarn, or pnpm
 
-## Learn More
+### Steps
 
-To learn more about Next.js, take a look at the following resources:
+1. Clone the repository:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+    ```
+    git clone https://github.com/your-username/s4e-frontend-task.git
+    cd s4e-frontend-task
+    ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. Install dependencies:
 
-## Deploy on Vercel
+    ```
+    npm install
+    ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+    or
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+    ```
+    yarn install
+    ```
+
+    or
+
+    ```
+    pnpm install
+    ```
+
+3. Start the development server:
+
+    ```
+    npm run dev
+    ```
+
+    or
+
+    ```
+    yarn dev
+    ```
+
+    or
+
+    ```
+    pnpm dev
+    ```
+
+4. Open the application in your browser:
+
+   [http://localhost:3000](http://localhost:3000)
+
+## How to Use
+
+1. Navigate to the Tools List section.
+2. Use the Search or Category Filter to refine results.
+3. Switch between Light and Dark themes using the toggle button.
+4. Navigate through pages using the pagination controls.
+
+## API Integration
+
+- **Endpoint**: List of All Scans
+- **Data Fetching**: Uses the fetch API for retrieving scan tools data.

@@ -1,13 +1,14 @@
 "use client";
 
+import { toast } from "@/hooks/use-toast";
 import { columns } from "./columns";
 import { DataTable } from "./dataTable";
 import { scannersData } from "@/app/seed/seedScannersData";
-import { transformScannerData } from "@/app/utils/utils";
+import { getFormattedDate, transformScannerData } from "@/app/utils/utils";
 import { Scanner } from "@/app/lib/definitions";
 import { useQueryStore } from "@/app/store/queryStore";
 import { fetchScanners } from "@/app/lib/data";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   getCurrentPageParam,
   getResultsPerPageParam,
@@ -17,26 +18,14 @@ import {
 
 export default function Scanners() {
   // Local sample data, TODO
-  const scanners: Scanner[] = transformScannerData(scannersData);
+  // const scanners: Scanner[] = transformScannerData(scannersData);
+  const { scanners, setScanners } = useQueryStore();
 
   const {
     searchInputParam,
     scanCategoryIdParam,
     currentPageParam,
     resultsPerPageParam,
-  } = useQueryStore();
-  console.log(
-    "searchInputParam: ",
-    searchInputParam,
-    "scanCategoryIdParam: ",
-    scanCategoryIdParam,
-    "currentPageParam: ",
-    currentPageParam,
-    "resultsPerPage: ",
-    resultsPerPageParam,
-  );
-
-  const {
     setSearchInputParam: setStoreSearchInputParam,
     setScanCategoryIdParam: setStoreScanCategoryIdParam,
     setCurrentPage: setStoreCurrentPage,
@@ -49,14 +38,6 @@ export default function Scanners() {
     const scanCategoryId = getScanCategoryIdParam();
     const currentPage = getCurrentPageParam();
     const resultsPerPage = getResultsPerPageParam();
-
-    // console.log(
-    //   "LOCALGET: ",
-    //   searchInput,
-    //   scanCategoryId,
-    //   currentPage,
-    //   resultsPerPage,
-    // );
 
     if (searchInput !== null) {
       setStoreSearchInputParam(searchInput);
@@ -79,14 +60,35 @@ export default function Scanners() {
   useEffect(() => {
     const handleFetchScanners = async () => {
       try {
-        await fetchScanners();
-        // setScanners(transformScannerData(fetchedScanners)); // Transform and set scanners
-      } catch (error) {
-        console.error("Failed to fetch scanners:", error);
+        const fetchedScanners = await fetchScanners();
+        setScanners(fetchedScanners);
+      } catch (error: unknown) {
+        // Type narrowing for error
+        if (error instanceof Error) {
+          console.error("Failed to fetch scanners:", error.message);
+          toast({
+            variant: "destructive",
+            title: `Failed to fetch scanners: ${error.message}`,
+            description: getFormattedDate(),
+          });
+        } else if (error instanceof Error) {
+          console.error("An unknown error occurred", error);
+          toast({
+            variant: "destructive",
+            title: `An unknown error occurred: ${error.message}`,
+            description: getFormattedDate(),
+          });
+        }
       }
     };
+
     handleFetchScanners();
-  }, []);
+  }, [
+    searchInputParam,
+    scanCategoryIdParam,
+    currentPageParam,
+    resultsPerPageParam,
+  ]);
 
   return (
     <div className="container max-w-full w-full">
