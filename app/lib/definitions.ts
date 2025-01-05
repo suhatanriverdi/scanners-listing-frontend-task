@@ -22,18 +22,7 @@ export type SeverityLevel =
   | "High"
   | "Critical";
 
-// TODO, will be used while fetching?
-export interface ScannerData {
-  event: object;
-  value: {
-    data: Scanner[];
-  };
-  message: string;
-  code: number;
-  error: boolean;
-}
-
-// TODO Structure of the raw data returned from the API
+// Structure of the raw data returned from the API
 export interface ScannerRaw {
   score: number; // Score of the scan
   meta_title: string; // Meta title of the scanner
@@ -44,7 +33,7 @@ export interface ScannerRaw {
   asset_type: string; // Type of asset (e.g., domain, IPv4)
   slug: string; // Unique identifier for the scanner
   estimate_time: number; // Estimated time for the scan
-  protocol_id: number; // Protocol ID used by the scanner
+  protocol_id: number | null; // Protocol ID used by the scanner
   created_at: string; // Creation date of the scanner
   result_img: string | null; // Image related to the scan result, if any
   name: string; // Name of the scanner

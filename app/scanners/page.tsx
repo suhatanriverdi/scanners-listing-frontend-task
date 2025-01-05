@@ -67,9 +67,6 @@ export default function Scanners() {
           resultsPerPageParam,
         );
 
-        console.log("fetchedScanners:", fetchedScanners);
-        console.log("totalCount:", totalCount);
-
         setTotalCountParam(totalCount);
         setScanners(fetchedScanners);
       } catch (error: unknown) {
