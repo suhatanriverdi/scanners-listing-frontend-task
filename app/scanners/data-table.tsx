@@ -40,7 +40,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ENDPOINTS } from "@/app/config/endpoints"; // Updated import
+import { ENDPOINTS } from "@/app/config/endpoints";
+import { categoryItem } from "@/app/lib/definitions"; // Updated import
+import { useQueryStore } from "../store/queryStore";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -56,9 +58,13 @@ export function DataTable<TData, TValue>({
   // State for sorting colums
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
+  // State for search and category for query string
+  const { setSearchInputParam, setScanCategoryIdParam } = useQueryStore();
+
   // State for search and category
   const [searchText, setSearchText] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  // This is for UI only
+  const [selectedCategory, setSelectedCategory] = useState<categoryItem>();
 
   // Initialize the table
   const table = useReactTable({
@@ -76,17 +82,20 @@ export function DataTable<TData, TValue>({
   const handleSearch = () => {
     const query = new URLSearchParams();
     if (selectedCategory) {
-      query.set("tools-category", selectedCategory);
+      // setScanCategoryIdParam(selectedCategory.value);
+      query.set("tools-category", selectedCategory.value);
     }
     if (searchText) {
+      setSearchInputParam(searchText);
       query.set("text", searchText);
     }
     query.set("page", String(0)); // Reset to page 0 on search
-    router.push(`${ENDPOINTS.scanners}?scan_type=0&${query.toString()}`);
+    console.log(`${ENDPOINTS.scanners}?scan_type=0&${query.toString()}`);
+    // router.push(`${ENDPOINTS.scanners}?scan_type=0&${query.toString()}`);
   };
 
   return (
-    <div>
+    <div className="overflow-x-auto">
       {/* Search Bar and Category Filter */}
       <div className="flex flex-col md:flex-row items-center justify-between gap-x-10 pb-4 gap-y-2 md:gap-y-0">
         <div className="flex items-center min-w-min-[19rem] gap-x-2 w-full md:w-auto">
@@ -96,7 +105,7 @@ export function DataTable<TData, TValue>({
               placeholder="Search..."
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
-              className="border border-sky-500 rounded-md h-10 px-4 pr-10 focus:outline-none focus:ring focus:ring-sky-300 w-full"
+              className="border border-sky-500 rounded-md h-10 px-4 pr-10 w-full"
             />
             <span className="absolute right-3 top-2 text-sky-500">
               <SearchIcon />
@@ -112,18 +121,19 @@ export function DataTable<TData, TValue>({
 
         {/* Dropdown Menu for Category Selection */}
         <DropdownMenu>
-          <DropdownMenuTrigger className="border rounded-md w-full md:w-[19rem] h-10 px-3 focus:outline-none focus:ring focus:ring-sky-300 overflow-hidden text-ellipsis whitespace-nowrap">
-            {selectedCategory ? selectedCategory : "Select Category"}
+          <DropdownMenuTrigger className="border rounded-md w-full md:w-[19rem] h-10 px-3 focus:outline-none focus:ring-0 overflow-hidden text-ellipsis whitespace-nowrap">
+            {selectedCategory ? selectedCategory.label : "Select Category"}
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-[19rem] md:w-[auto] max-w-full">
             <DropdownMenuLabel>Select Category</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            {categories.map((category) => (
+            {categories.map((category: categoryItem) => (
               <DropdownMenuItem
                 className="cursor-pointer"
                 key={category.value}
                 onSelect={() => {
-                  setSelectedCategory(category.label);
+                  setSelectedCategory(category);
+                  setScanCategoryIdParam(category.value);
                 }}
               >
                 {category.label}
@@ -132,18 +142,17 @@ export function DataTable<TData, TValue>({
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className="cursor-pointer"
-              onSelect={() => setSelectedCategory(null)} // Reset selection
+              onSelect={() => setSelectedCategory(undefined)} // Reset selection
             >
               Clear Selection
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-
-        {/* Toggle Dark/Light Mode */}
-        {/*<ModeToggle />*/}
       </div>
-
-      <div className="rounded-md border">
+      {/* Table Container */}
+      <div className="rounded-md border overflow-hidden">
+        {" "}
+        {/* Added overflow-hidden */}
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -191,19 +200,18 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-
       {/* Pagination Controls */}
       <div className="flex items-center justify-between px-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
-          {"Total:" + data.length}
+          {"Total: " + data.length}
         </div>
-        <div className="flex items-center space-x-6 lg:space-x-8">
-          <div className="flex items-center space-x-2">
-            <p className="text-sm font-medium">Rows per page</p>
+        <div className="flex items-center gap-x-4 lg:gap-x-8">
+          <div className="flex items-center gap-x-2">
+            <p className="text-sm font-medium">Rows:</p>
             <select
               value={`${table.getState().pagination.pageSize}`}
               onChange={(e) => table.setPageSize(Number(e.target.value))}
-              className="h-8 w-[70px] border rounded-md"
+              className="h-8 w-[2.9rem] border rounded-md"
             >
               {[10, 20, 30, 40, 50].map((pageSize) => (
                 <option key={pageSize} value={`${pageSize}`}>
@@ -213,12 +221,12 @@ export function DataTable<TData, TValue>({
             </select>
           </div>
 
-          <div className="flex w-[100px] items-center justify-center text-sm font-medium">
+          <div className="flex items-center justify-center text-sm font-medium">
             Page {table.getState().pagination.pageIndex + 1} of{" "}
             {table.getPageCount()}
           </div>
 
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center gap-x-2">
             <Button
               variant="outline"
               className="hidden h-8 w-8 p-0 lg:flex"

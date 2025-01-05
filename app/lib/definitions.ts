@@ -1,6 +1,8 @@
 // This file contains type definitions for our data,
 // Describing the shape of the data, and what data type each property should accept.
 
+export type categoryItem = { label: string; value: string };
+
 export type SeverityLevel =
   | "None"
   | "Informational"
@@ -17,24 +19,26 @@ export type ScannerData = {
   };
 };
 
-export type Scanner = {
-  name: string;
-  description: string;
-  severity: string;
-};
+// Structure of the raw data returned from the API
+export interface ScannerRaw {
+  score: number; // Score of the scan
+  meta_title: string; // Meta title of the scanner
+  mini_desc: string; // Short description of the scanner
+  auto_desc: string; // Automatic description of the scanner
+  if_api_support: boolean; // Indicates if API support is available
+  user_id: number | null; // User ID associated with the scan, if any
+  asset_type: string; // Type of asset (e.g., domain, IPv4)
+  slug: string; // Unique identifier for the scanner
+  estimate_time: number; // Estimated time for the scan
+  protocol_id: number; // Protocol ID used by the scanner
+  created_at: string; // Creation date of the scanner
+  result_img: string | null; // Image related to the scan result, if any
+  name: string; // Name of the scanner
+}
 
-export type ScannerRaw = {
-  name: string;
-  result_img: string | null;
-  if_api_support: boolean;
-  created_at: string;
-  auto_desc: string;
-  protocol_id: number | null;
-  score: number;
-  mini_desc: string;
-  user_id: string | null;
-  meta_title: string;
-  asset_type: string;
-  slug: string;
-  estimate_time: number;
-};
+// Data structure for use in the table
+export interface Scanner {
+  name: string; // Name of the scanner
+  description: string; // Description of the scanner
+  severity: string; // Severity determined by getSeverity function
+}
