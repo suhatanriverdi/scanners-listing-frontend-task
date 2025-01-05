@@ -105,9 +105,6 @@ export function DataTable<TData, TValue>({
     },
   });
 
-  console.log("Table Data:", data);
-  console.log("Table Rows:", table.getRowModel().rows);
-
   // Handle page change
   const handlePageChange = (newPageIndex: number) => {
     setCurrentPage(newPageIndex + 1); // Update Zustand store (1-based index)

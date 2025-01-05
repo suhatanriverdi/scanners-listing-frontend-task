@@ -51,11 +51,6 @@ export const fetchScanners = async (
     const transformedData: Scanner[] = transformScannerData(data.value.data);
     const totalRowsCount = data.value.total_count;
 
-    console.log("url:", url, "\n\n");
-    console.log("Request Body:", body);
-    console.log("transformedData:", transformedData.pop(), "\n\n");
-    console.log("totalRowsCount:", totalRowsCount);
-
     // Return the fetched data & total rows count
     return [transformedData, totalRowsCount];
   } catch (error) {
