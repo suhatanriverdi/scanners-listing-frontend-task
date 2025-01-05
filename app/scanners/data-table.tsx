@@ -41,7 +41,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ENDPOINTS } from "@/app/config/endpoints";
-import { categoryItem } from "@/app/lib/definitions"; // Updated import
+import { CategoryItem } from "@/app/lib/definitions"; // Updated import
 import { useQueryStore } from "../store/queryStore";
 
 interface DataTableProps<TData, TValue> {
@@ -62,16 +62,17 @@ export function DataTable<TData, TValue>({
   const {
     setSearchInputParam,
     setScanCategoryIdParam,
-    currentPage,
-    resultsPerPage,
+    currentPageParam,
+    resultsPerPageParam,
     setCurrentPage,
     setResultsPerPage,
   } = useQueryStore();
 
   // State for search and category
   const [searchText, setSearchText] = useState("");
+
   // This is for UI only
-  const [selectedCategory, setSelectedCategory] = useState<categoryItem>();
+  const [selectedCategory, setSelectedCategory] = useState<CategoryItem>();
 
   // Initialize the table
   const table = useReactTable({
@@ -84,8 +85,8 @@ export function DataTable<TData, TValue>({
     state: {
       sorting,
       pagination: {
-        pageIndex: currentPage - 1, // Adjust for zero-based index
-        pageSize: resultsPerPage,
+        pageIndex: currentPageParam - 1, // Adjust for zero-based index
+        pageSize: resultsPerPageParam,
       },
     },
   });
@@ -101,22 +102,6 @@ export function DataTable<TData, TValue>({
     setResultsPerPage(newPageSize); // Update Zustand store
     table.setPageSize(newPageSize); // Update local table state
     handlePageChange(0); // Reset to first page when changing page size
-  };
-
-  const handleSearch = () => {
-    const query = new URLSearchParams();
-    if (selectedCategory) {
-      // setScanCategoryIdParam(selectedCategory.value);
-      query.set("tools-category", selectedCategory.value);
-    }
-    if (searchText) {
-      setSearchInputParam(searchText);
-      setSearchText("");
-      query.set("text", searchText);
-    }
-    query.set("page", String(0)); // Reset to page 0 on search
-    console.log(`${ENDPOINTS.scanners}?scan_type=0&${query.toString()}`);
-    // router.push(`${ENDPOINTS.scanners}?scan_type=0&${query.toString()}`);
   };
 
   return (
@@ -137,7 +122,10 @@ export function DataTable<TData, TValue>({
             </span>
           </div>
           <Button
-            onClick={handleSearch}
+            onClick={() => {
+              setSearchInputParam(searchText);
+              setSearchText("");
+            }}
             className="bg-sky-500 text-white hover:bg-sky-600 h-10"
           >
             Search
@@ -152,7 +140,7 @@ export function DataTable<TData, TValue>({
           <DropdownMenuContent className="w-[19rem] md:w-[auto] max-w-full">
             <DropdownMenuLabel>Select Category</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            {categories.map((category: categoryItem) => (
+            {categories.map((category: CategoryItem) => (
               <DropdownMenuItem
                 className="cursor-pointer"
                 key={category.value}

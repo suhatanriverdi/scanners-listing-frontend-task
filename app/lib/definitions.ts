@@ -1,7 +1,18 @@
 // This file contains type definitions for our data,
 // Describing the shape of the data, and what data type each property should accept.
 
-export type categoryItem = { label: string; value: string };
+export interface CategoryItem {
+  label: string;
+  value: string;
+}
+
+export interface FetchScannersBody {
+  query?: string; // Search query
+  scan_category_id?: number; // Optional category ID
+  page: number; // Current page number
+  per_page: number; // Number of results per page
+  token: string | undefined; // API token
+}
 
 export type SeverityLevel =
   | "None"
@@ -12,14 +23,14 @@ export type SeverityLevel =
   | "Critical";
 
 // TODO, will be used while fetching?
-export type ScannerData = {
+export interface ScannerData {
   event: object;
   value: {
     data: Scanner[];
   };
-};
+}
 
-// Structure of the raw data returned from the API
+// TODO Structure of the raw data returned from the API
 export interface ScannerRaw {
   score: number; // Score of the scan
   meta_title: string; // Meta title of the scanner
