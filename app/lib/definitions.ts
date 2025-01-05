@@ -1,6 +1,14 @@
 // This file contains type definitions for our data,
 // Describing the shape of the data, and what data type each property should accept.
 
+export type SeverityLevel =
+  | "None"
+  | "Informational"
+  | "Low"
+  | "Medium"
+  | "High"
+  | "Critical";
+
 // TODO, will be used while fetching?
 export type ScannerData = {
   event: object;

@@ -1,11 +1,15 @@
 "use client";
 
+import * as React from "react";
+
 import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
   getPaginationRowModel,
+  SortingState,
+  getSortedRowModel,
 } from "@tanstack/react-table";
 
 import {
@@ -27,7 +31,16 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { categories } from "@/app/utils/utils"; // Updated import
+import { categories } from "@/app/utils/utils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ENDPOINTS } from "@/app/config/endpoints"; // Updated import
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -40,6 +53,9 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const router = useRouter(); // Using the correct router
 
+  // State for sorting colums
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+
   // State for search and category
   const [searchText, setSearchText] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -50,6 +66,11 @@ export function DataTable<TData, TValue>({
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting,
+    },
   });
 
   const handleSearch = () => {
@@ -61,14 +82,14 @@ export function DataTable<TData, TValue>({
       query.set("text", searchText);
     }
     query.set("page", String(0)); // Reset to page 0 on search
-    router.push(`/scans/tools?scan_type=0&${query.toString()}`);
+    router.push(`${ENDPOINTS.scanners}?scan_type=0&${query.toString()}`);
   };
 
   return (
     <div>
       {/* Search Bar and Category Filter */}
-      <div className="flex flex-col md:flex-row items-center justify-between p-4 space-y-2 md:space-y-0">
-        <div className="flex items-center space-x-2 w-full md:w-auto">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-x-10 pb-4 gap-y-2 md:gap-y-0">
+        <div className="flex items-center min-w-min-[19rem] gap-x-2 w-full md:w-auto">
           <div className="relative w-full">
             <input
               type="text"
@@ -89,20 +110,37 @@ export function DataTable<TData, TValue>({
           </Button>
         </div>
 
-        <div className="flex items-center space-x-2 w-full md:w-auto">
-          <select
-            value={selectedCategory || ""}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className="border rounded-md h-10 px-2 focus:outline-none focus:ring focus:ring-sky-300 w-full"
-          >
-            <option value="">Select Category</option>
+        {/* Dropdown Menu for Category Selection */}
+        <DropdownMenu>
+          <DropdownMenuTrigger className="border rounded-md w-full md:w-[19rem] h-10 px-3 focus:outline-none focus:ring focus:ring-sky-300 overflow-hidden text-ellipsis whitespace-nowrap">
+            {selectedCategory ? selectedCategory : "Select Category"}
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-[19rem] md:w-[auto] max-w-full">
+            <DropdownMenuLabel>Select Category</DropdownMenuLabel>
+            <DropdownMenuSeparator />
             {categories.map((category) => (
-              <option key={category.value} value={category.value}>
+              <DropdownMenuItem
+                className="cursor-pointer"
+                key={category.value}
+                onSelect={() => {
+                  setSelectedCategory(category.label);
+                }}
+              >
                 {category.label}
-              </option>
+              </DropdownMenuItem>
             ))}
-          </select>
-        </div>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className="cursor-pointer"
+              onSelect={() => setSelectedCategory(null)} // Reset selection
+            >
+              Clear Selection
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        {/* Toggle Dark/Light Mode */}
+        {/*<ModeToggle />*/}
       </div>
 
       <div className="rounded-md border">
