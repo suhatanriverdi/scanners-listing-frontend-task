@@ -39,11 +39,7 @@ export const fetchScanners = async () => {
   const url = `${ENDPOINTS.scanners}/scan/list`; // Correct URL for the POST request
 
   console.log("Making POST request to:", url);
-  console.log("Request Headers:", {
-    Accept: "application/json",
-    "Content-Type": "application/json",
-  });
-  console.log("Request Body:", JSON.stringify(body, null, 2)); // Pretty print the body
+  console.log("Request Body:", JSON.stringify(body, null, 2), "\n\n"); // Pretty print the body
 
   // try {
   //   const response = await fetch(url, {

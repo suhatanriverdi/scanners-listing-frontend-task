@@ -28,9 +28,9 @@ import {
   ChevronsLeft,
   ChevronsRight,
   SearchIcon,
+  XIcon,
 } from "lucide-react";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { categories } from "@/app/utils/utils";
 import {
   DropdownMenu,
@@ -40,7 +40,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ENDPOINTS } from "@/app/config/endpoints";
 import { CategoryItem } from "@/app/lib/definitions"; // Updated import
 import { useQueryStore } from "../store/queryStore";
 
@@ -53,8 +52,6 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const router = useRouter(); // Using the correct router
-
   // State for sorting colums
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
@@ -108,7 +105,7 @@ export function DataTable<TData, TValue>({
     <div className="overflow-x-auto">
       {/* Search Bar and Category Filter */}
       <div className="flex flex-col md:flex-row items-center justify-between gap-x-10 pb-4 gap-y-2 md:gap-y-0">
-        <div className="flex items-center min-w-min-[19rem] gap-x-2 w-full md:w-auto">
+        <div className="flex items-center min-w-[19rem] gap-x-2 w-full md:w-auto">
           <div className="relative w-full">
             <input
               type="text"
@@ -117,14 +114,27 @@ export function DataTable<TData, TValue>({
               onChange={(e) => setSearchText(e.target.value)}
               className="border border-sky-500 rounded-md h-10 px-4 pr-10 w-full"
             />
-            <span className="absolute right-3 top-2 text-sky-500">
-              <SearchIcon />
-            </span>
+            {!searchText && (
+              <span className="absolute right-3 top-2 text-sky-500">
+                <SearchIcon />
+              </span>
+            )}
+            {searchText && ( // Çarpı ikonu yalnızca bir metin varsa görünsün
+              <span
+                className="absolute right-3 top-2 cursor-pointer text-sky-500"
+                onClick={() => {
+                  setSearchText("");
+                  setSearchInputParam("");
+                }}
+              >
+                <XIcon />
+              </span>
+            )}
           </div>
           <Button
             onClick={() => {
               setSearchInputParam(searchText);
-              setSearchText("");
+              // setSearchText(""); // Eğer arama kutusunu sıfırlamak istemiyorsanız bu satırı bırakabilirsiniz
             }}
             className="bg-sky-500 text-white hover:bg-sky-600 h-10"
           >

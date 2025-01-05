@@ -14,7 +14,7 @@ import { useEffect } from "react";
 // import {useEffect} from "react";
 
 export default function Scanners() {
-  // Local sample data TODO
+  // Local sample data, TODO
   const scanners: Scanner[] = transformScannerData(scannersData);
 
   const {
@@ -44,7 +44,6 @@ export default function Scanners() {
         console.error("Failed to fetch scanners:", error);
       }
     };
-
     handleFetchScanners();
   }, [
     searchInputParam,
