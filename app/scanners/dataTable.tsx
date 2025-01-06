@@ -263,7 +263,7 @@ export function DataTable<TData, TValue>({
               onChange={(e) => {
                 handleResultsPerPageChange(Number(e.target.value));
               }}
-              className="h-8 w-[2.9rem] border rounded-md"
+              className="h-8 border rounded-md"
             >
               {[10, 20, 30, 40, 50].map((pageSize) => (
                 <option key={pageSize} value={`${pageSize}`}>

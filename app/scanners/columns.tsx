@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Scanner, SeverityLevel } from "@/app/lib/definitions";
 import { ArrowUpDown } from "lucide-react";
-import { Button } from "@/components/ui/button"; // Buton bileşenini uygun yerden içe aktarın
+import { Button } from "@/components/ui/button";
 
 export const columns: ColumnDef<Scanner>[] = [
   {
@@ -12,6 +12,7 @@ export const columns: ColumnDef<Scanner>[] = [
       <Button
         variant="ghost"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        className="text-xs sm:text-sm"
       >
         Name
         <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -19,15 +20,15 @@ export const columns: ColumnDef<Scanner>[] = [
     ),
     cell: ({ row }) => (
       <div
-        className="w-[300px] overflow-hidden"
-        title={row.getValue("name")} // Tooltip gösterir
+        className="w-full sm:w-[250px] overflow-hidden"
+        title={row.getValue("name")}
       >
         <span
-          className="line-clamp-2 overflow-hidden text-ellipsis"
+          className="line-clamp-2 overflow-hidden text-ellipsis block"
           style={{
             display: "-webkit-box",
             WebkitBoxOrient: "vertical",
-            WebkitLineClamp: 2, // 2 satır sınırı
+            WebkitLineClamp: 2,
           }}
         >
           {row.getValue("name")}
@@ -41,6 +42,7 @@ export const columns: ColumnDef<Scanner>[] = [
       <Button
         variant="ghost"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        className="text-xs sm:text-sm"
       >
         Description
         <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -48,15 +50,15 @@ export const columns: ColumnDef<Scanner>[] = [
     ),
     cell: ({ row }) => (
       <div
-        className="w-[500px] overflow-hidden"
-        title={row.getValue("description")} // Tooltip gösterir
+        className="w-full sm:w-[400px] overflow-hidden"
+        title={row.getValue("description")}
       >
         <span
-          className="line-clamp-2 overflow-hidden text-ellipsis"
+          className="line-clamp-2 overflow-hidden text-ellipsis block"
           style={{
             display: "-webkit-box",
             WebkitBoxOrient: "vertical",
-            WebkitLineClamp: 2, // 2 satır sınırı
+            WebkitLineClamp: 2,
           }}
         >
           {row.getValue("description")}
@@ -70,6 +72,7 @@ export const columns: ColumnDef<Scanner>[] = [
       <Button
         variant="ghost"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        className="text-xs sm:text-sm"
       >
         Severity
         <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -78,14 +81,14 @@ export const columns: ColumnDef<Scanner>[] = [
     cell: ({ row }) => {
       const severity = row.getValue("severity") as SeverityLevel;
       const severityClass: Record<SeverityLevel, string> = {
-        None: "rounded-full bg-gray-500 text-white p-3 w-[7rem] text-center",
+        None: "rounded-full bg-gray-500 text-white p-2 w-[6rem] text-center",
         Informational:
-          "rounded-full bg-sky-500 text-white p-3 w-[7rem] text-center",
-        Low: "rounded-full bg-green-500 text-white p-3 w-[7rem] text-center",
+          "rounded-full bg-sky-500 text-white p-2 w-[6rem] text-center",
+        Low: "rounded-full bg-green-500 text-white p-2 w-[6rem] text-center",
         Medium:
-          "rounded-full bg-yellow-500 text-white p-3 w-[7rem] text-center",
-        High: "rounded-full bg-orange-500 text-white p-3 w-[7rem] text-center",
-        Critical: "rounded-full bg-red-500 text-white p-3 w-[7rem] text-center",
+          "rounded-full bg-yellow-500 text-white p-2 w-[6rem] text-center",
+        High: "rounded-full bg-orange-500 text-white p-2 w-[6rem] text-center",
+        Critical: "rounded-full bg-red-500 text-white p-2 w-[6rem] text-center",
       };
 
       return (
@@ -96,7 +99,6 @@ export const columns: ColumnDef<Scanner>[] = [
     },
 
     sortingFn: (rowA, rowB) => {
-      // Define severityOrder here
       const severityOrder: Record<SeverityLevel, number> = {
         None: 0,
         Informational: 1,
