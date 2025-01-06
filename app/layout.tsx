@@ -36,12 +36,14 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
+          <div className="flex min-h-screen flex-col md:flex-row md:overflow-hidden">
             <div className="w-full flex-none md:w-64">
               <SideNav />
             </div>
             <div className="grow overflow-hidden">
-              <div className="h-full overflow-y-auto px-3 py-4">{children}</div>
+              <div className="min-h-full overflow-y-auto px-3 py-4">
+                {children}
+              </div>
             </div>
           </div>
           <Toaster />

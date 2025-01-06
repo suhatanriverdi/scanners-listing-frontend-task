@@ -4,9 +4,17 @@ import NavLinks from "@/app/ui/navLinks";
 import { PowerIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 export default function SideNav() {
   const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
 
   return (
     <div className="flex h-full flex-col px-3 py-4 md:px-2">

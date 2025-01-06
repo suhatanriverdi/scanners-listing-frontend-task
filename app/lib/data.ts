@@ -32,7 +32,7 @@ export const fetchScanners = async (
     body.scan_category_id = parseInt(scanCategoryIdParam);
   }
 
-  const url = `${ENDPOINTS.scanners}`; // This should point to your API route
+  const url = `${ENDPOINTS.scanners}`;
 
   try {
     const response = await fetch(url, {
