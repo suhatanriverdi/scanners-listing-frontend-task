@@ -26,6 +26,15 @@ You can have a look at the live preview link:
 <hr />
 <img width="1715" alt="Screenshot 2025-01-06 at 03 43 54" src="https://github.com/user-attachments/assets/da2b95e3-1ee4-42dc-b875-122fdfcb4613" />
 
+## Mobile Devices
+
+<img width="655" alt="Screenshot 2025-01-06 at 03 53 19" src="https://github.com/user-attachments/assets/06ac7da0-a0ec-4670-9322-9ef8cbd677ec" />
+<hr />
+<img width="615" alt="Screenshot 2025-01-06 at 04 09 05" src="https://github.com/user-attachments/assets/6e90faed-1b42-4600-848b-e92f019f1ca5" />
+<hr />
+<img width="615" alt="image" src="https://github.com/user-attachments/assets/591b64e1-7ccc-4772-b58f-b92ea6c75d56" />
+
+
 ## Project Description
 
 **S4E.io** is a cybersecurity platform that continuously detects and reports system vulnerabilities. This project focuses on implementing the scan tools list available at [S4E.io Scan Tools](https://app.s4e.io/scans/tools).
