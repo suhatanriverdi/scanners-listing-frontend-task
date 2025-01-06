@@ -1,18 +1,30 @@
-# S4E.io Frontend Application
+# Next.js App Data Table Listing
 
 This repository contains the implementation of a simple frontend application for the S4E.io platform. The application replicates a scan tools list with filtering, responsive design, and local state persistence. It is built using **Next.js**, **Tailwind CSS**, and **ShadCN UI**.
 
+## 🚀 Live Preview
+You can have a look at the live preview link:
+## [Live Preview Link](https://scanners-listing-frontend-task.vercel.app/)
+
 ## Screenshots
 
-<img width="1472" alt="Screenshot 2025-01-06 at 00 13 46" src="https://github.com/user-attachments/assets/cd3315cc-ea25-4f33-ae27-7c33eb2ab8cf" />
+<img width="1548" alt="Screenshot 2025-01-06 at 03 38 33" src="https://github.com/user-attachments/assets/40368bfb-a7da-48ce-89b8-327a5f308222" />
 <hr />
-<img width="1471" alt="Screenshot 2025-01-06 at 00 14 23" src="https://github.com/user-attachments/assets/36ef0ef2-dfe6-492b-9960-9706ff5c414b" />
+<img width="1717" alt="Screenshot 2025-01-06 at 03 43 22" src="https://github.com/user-attachments/assets/607d4d16-fd32-43fa-a19a-f3a9694eea1f" />
+<hr />
+<img width="1716" alt="Screenshot 2025-01-06 at 03 44 12" src="https://github.com/user-attachments/assets/49a7c87a-41fb-49e7-b522-3fbce6e1cc2a" />
 <hr />
 <img width="325" alt="Screenshot 2025-01-06 at 00 14 43" src="https://github.com/user-attachments/assets/71575d08-1cfd-4033-bc83-5d0ac665ab00" />
 <hr />
-<img width="1469" alt="Screenshot 2025-01-06 at 00 15 08" src="https://github.com/user-attachments/assets/db2d74b6-bb3a-4f8a-ae4a-feaa83b52b21" />
-<hr />
 <img width="1263" alt="image" src="https://github.com/user-attachments/assets/13446b91-3d7c-4e87-a377-e4a9ae2e1e26" />
+
+### Dark Mode
+
+<img width="1548" alt="Screenshot 2025-01-06 at 03 38 14" src="https://github.com/user-attachments/assets/f3aafaed-23b2-468c-9345-d86c2acc975e" />
+<hr />
+<img width="1716" alt="Screenshot 2025-01-06 at 03 43 33" src="https://github.com/user-attachments/assets/ab260681-073a-4a8f-91ca-764a4545356a" />
+<hr />
+<img width="1715" alt="Screenshot 2025-01-06 at 03 43 54" src="https://github.com/user-attachments/assets/da2b95e3-1ee4-42dc-b875-122fdfcb4613" />
 
 ## Project Description
 
