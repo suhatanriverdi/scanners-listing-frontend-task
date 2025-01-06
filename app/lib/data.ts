@@ -48,8 +48,8 @@ export const fetchScanners = async (
     }
 
     const data = await response.json();
-    const transformedData: Scanner[] = transformScannerData(data.value.data);
-    const totalRowsCount = data.value.total_count;
+    const transformedData: Scanner[] = transformScannerData(data.value?.data);
+    const totalRowsCount = data.value?.total_count || 0;
 
     // Return the fetched data & total rows count
     return [transformedData, totalRowsCount];

@@ -32,7 +32,13 @@ export const getSeverity = (score: number): string => {
   return "Critical";
 };
 
-export const transformScannerData = (rawData: ScannerRaw[]): Scanner[] => {
+export const transformScannerData = (
+  rawData: ScannerRaw[] | undefined,
+): Scanner[] => {
+  if (!rawData) {
+    return [];
+  }
+
   const scanners: Scanner[] = rawData.map((item) => ({
     name: item.name,
     description: item.mini_desc || item.auto_desc,
