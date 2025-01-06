@@ -35,7 +35,7 @@ export const getSeverity = (score: number): string => {
 export const transformScannerData = (rawData: ScannerRaw[]): Scanner[] => {
   const scanners: Scanner[] = rawData.map((item) => ({
     name: item.name,
-    description: item.auto_desc || item.mini_desc,
+    description: item.mini_desc || item.auto_desc,
     severity: getSeverity(item.score),
   }));
 

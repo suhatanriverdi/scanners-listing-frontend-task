@@ -42,6 +42,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { CategoryItem } from "@/app/lib/definitions"; // Updated import
 import { useQueryStore } from "../store/queryStore";
+import { ModeToggle } from "@/app/components/modeToggle";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -120,6 +121,11 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="overflow-x-auto">
+      <div className="flex justify-between items-center mb-2">
+        <p className="text-xl">List of Scanners</p>
+        {/* Toggle Dark Mode */}
+        <ModeToggle />
+      </div>
       {/* Search Bar and Category Filter */}
       <div className="flex flex-col md:flex-row items-center justify-between gap-x-10 pb-4 gap-y-2 md:gap-y-0">
         <div className="flex items-center min-w-[19rem] gap-x-2 w-full md:w-auto">
@@ -158,7 +164,6 @@ export function DataTable<TData, TValue>({
             Search
           </Button>
         </div>
-
         {/* Dropdown Menu for Category Selection */}
         <DropdownMenu>
           <DropdownMenuTrigger className="border rounded-md w-full md:w-[19rem] h-10 px-3 focus:outline-none focus:ring-0 overflow-hidden text-ellipsis whitespace-nowrap">
@@ -192,6 +197,7 @@ export function DataTable<TData, TValue>({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
       {/* Table Container */}
       <div className="rounded-md border overflow-hidden">
         {" "}
@@ -243,6 +249,7 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
+
       {/* Pagination Controls */}
       <div className="flex items-center justify-between px-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">
